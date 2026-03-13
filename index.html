@@ -67,7 +67,7 @@
         });
 
         // CARICAMENTO DELLA NUVOLA SISAIA_CONVERTED
-        Potree.loadPointCloud("./pointclouds/sisaia_converted/metadata.json", "sisaia", e => {
+Potree.loadPointCloud("./pointclouds/sisaia_converted/metadata.json", "sisaia", e => {
             let scene = viewer.scene;
             let pointcloud = e.pointcloud;
 
@@ -76,9 +76,16 @@
             material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
             material.shape = Potree.PointShape.CIRCLE;
             
-            // Impostazione Elevation
+            // Attiviamo l'Elevation
             material.activeAttributeName = "elevation";
-            material.elevationRange = [0, 50]; // Range iniziale modificabile dalla sidebar
+
+            // --- TRUCCO PER IL COLORE BIANCO ---
+            // Calcoliamo i limiti reali della tua nuvola (Bounding Box)
+            let min = pointcloud.boundingBox.min.y;
+            let max = pointcloud.boundingBox.max.y;
+            
+            // Se il modello è orientato diversamente, prova a cambiare .y con .z
+            material.elevationRange = [min, max]; 
 
             scene.addPointCloud(pointcloud);
             viewer.fitToScreen();
@@ -87,3 +94,4 @@
     </script>
 </body>
 </html>
+
