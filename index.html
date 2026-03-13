@@ -24,7 +24,9 @@
         viewer.setEDLEnabled(true);
         viewer.setFOV(60);
         viewer.setPointBudget(1_000_000);
-        viewer.setBackground("gradient");
+        
+        // Ho cambiato lo sfondo in grigio scuro per far risaltare il gradiente Elevation
+        viewer.setBackground("black");
         
         viewer.loadGUI(() => {
             viewer.setLanguage('en');
@@ -32,8 +34,7 @@
             viewer.toggleSidebar();
         });
         
-        // CARICAMENTO DEL TUO MODELLO
-        // Ho usato il percorso che vedo dai tuoi screenshot di GitHub
+        // CARICAMENTO DEL MODELLO SISAIA
         Potree.loadPointCloud("pointclouds/sisaia_converted/metadata.json", "sisaia", e => {
             let scene = viewer.scene;
             let pointcloud = e.pointcloud;
@@ -43,13 +44,10 @@
             material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
             material.shape = Potree.PointShape.SQUARE;
 
-            // IMPOSTA COLORE DI DEFAULT (Opzionale)
-            // material.activeAttributeName = "elevation"; // Se vuoi i colori originali
+            // --- ATTIVAZIONE ELEVATION ---
+            material.activeAttributeName = "elevation"; 
             
-            scene.addPointCloud(pointcloud);
-            viewer.fitToScreen();
-        });
-    </script>
-</body>
-</html>
-
+            // Impostiamo un range di altezza. 
+            // Se la nuvola non cambia colore, prova a cambiare i numeri [0, 20] 
+            // con quote più adatte al tuo rilievo (es. [100, 150] se sei in montagna)
+            material.elevationRange = [0, 20];
