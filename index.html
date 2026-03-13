@@ -54,29 +54,32 @@
             viewer.toggleSidebar();
         });
 
-        Potree.loadPointCloud("./pointclouds/sisaia_converted/metadata.json", "sisaia", e => {
+        Potree.loadPointCloud("pointclouds/sisaia_converted/metadata.json", "sisaia", e => {
             let scene = viewer.scene;
             let pointcloud = e.pointcloud;
-            let material = pointcloud.material;
 
+            let material = pointcloud.material;
             material.size = 1.5; 
             material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
             material.shape = Potree.PointShape.CIRCLE;
             
-            // IMPOSTAZIONI COLORE
+            // Impostazione Elevation con i tuoi valori 0-18
             material.activeAttributeName = "elevation";
-            
-            // RANGE IMPOSTATO SUI TUOI VALORI (0-18)
             material.elevationRange = [0, 18]; 
-            
-            // Impostiamo il gradiente "SPECTRAL" (colori dell'arcobaleno)
             material.gradient = Potree.Gradients.SPECTRAL;
 
             scene.addPointCloud(pointcloud);
+            
+            // --- QUESTA PARTE È FONDAMENTALE PER LO SCHERMO NERO ---
+            // Forza la telecamera a volare esattamente sopra il modello
+            viewer.zoomTo(pointcloud, 1); 
+            
+            // Se ancora non vedi nulla, questo comando sposta la visuale al centro
             viewer.fitToScreen();
         });
     </script>
 </body>
 </html>
+
 
 
